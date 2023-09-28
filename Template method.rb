@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 #Задачу придумала сама, бо хочу розробити бота, щоб він мені всяку штуку архівував
-
+ARCHIVE_FILE_PATH = 'archive.zip'
+PDF_FOLDER_PATH = 'D:\RubyProjects\uni'
+COMPRESSED_FOLDER_PATH = 'D:\RubyProjects\uni'
 
 # Абстрактний клас для архівації документів
 class DocumentArchiver
@@ -10,28 +12,28 @@ class DocumentArchiver
 
   # Загальний метод для архівації документів
   def archive_document
-    prepare_document
-    compress_document
-    store_document
-    cleanup
+    prepare_document(@document)
+    compress_document(@document)
+    store_document(@document)
+    cleanup(@document)
   end
 
   private
 
   # Абстрактні методи, які повинні бути реалізовані в конкретних підкласах
-  def prepare_document
+  def prepare_document(doc)
     raise NotImplementedError, "#{self.class} має реалізувати метод prepare_document"
   end
 
-  def compress_document
+  def compress_document(doc)
     raise NotImplementedError, "#{self.class} має реалізувати метод compress_document"
   end
 
-  def store_document
+  def store_document(doc)
     raise NotImplementedError, "#{self.class} має реалізувати метод store_document"
   end
 
-  def cleanup
+  def cleanup(doc)
     puts "Очищення тимчасових файлів..."
   end
 end
@@ -41,15 +43,29 @@ end
 class PdfDocumentArchiver < DocumentArchiver
   private
 
-  def prepare_document
-    puts "Підготовка PDF-документа для архівації..."
+  def prepare_document(doc)
+    destination_file = "#{PDF_FOLDER_PATH}/#{File.basename(doc)}"
+
+    if File.exist?(destination_file)
+      puts "Файл #{File.basename(doc)} вже існує у папці. Пропускаю копіювання."
+    else
+      FileUtils.cp(doc, destination_file)
+      puts "Файл #{File.basename(doc)} скопійовано до папки з PDF-файлами."
+    end
   end
 
-  def compress_document
-    puts "Стискання PDF-документа..."
+  def compress_document(doc)
+    # Використовуємо стиснення для PDF-файлу
+    compressed_document = "#{COMPRESSED_FOLDER_PATH}/#{File.basename(doc, '.pdf')}.zip"
+
+    Zip::File.open(compressed_document, Zip::File::CREATE) do |zipfile|
+      zipfile.add(File.basename(document), document)
+    end
+
+    compressed_document
   end
 
-  def store_document
+  def store_document(doc)
     puts "Збереження архівованого PDF-документа..."
   end
 end
