@@ -1,4 +1,4 @@
-# Метод для конвертації римських цифр в ціле число
+
 def roman_to_int(roman)
   rom_script = {
     'I' => 1, 'V' => 5, 'X' => 10, 'L' => 50, 'C' => 100, 'D' => 500, 'M' => 1000
@@ -26,7 +26,7 @@ def roman_to_int(roman)
   result
 end
 
-# Метод для конвертації цілих чисел в римські цифри
+
 def int_to_roman(num)
   roman_numerals = {
     1000 => 'M', 900 => 'CM', 500 => 'D', 400 => 'CD',
