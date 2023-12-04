@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'nokogiri'
 require 'open-uri'
-require 'cvs'
+require 'csv'
 
 def google_search(link)
   begin
@@ -22,17 +22,23 @@ def google_search(link)
       end
     end
 
-
     puts "\n\nPage links:"
+    data = []
     doc.css(".column1 ul li a").each_with_index do |l, index|
       puts "#{index+1}. " + l.content
       puts "link: " + l['href'] + "\n\n"
+      data << [index + 1, l.content, l['href']]
+    end
+
+    # Write data to CSV file
+    CSV.open('output.csv', 'w') do |csv|
+      csv << ['Index', 'Content', 'Link']
+      data.each { |row| csv << row }
     end
 
   rescue StandardError => e
     puts "Error: #{e.message}"
   end
 end
-
 
 google_search("https://www.hospitalsafetygrade.org/all-hospitals")
