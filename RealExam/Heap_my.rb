@@ -129,7 +129,7 @@ end
 # Метод для планування завдань з використанням купи
 def schedule_tasks(tasks)
   # Створення порожньої купи
-  heap = MinHeap.new { |task1, task2| task1.priority <=> task2.priority }
+  heap = MinHeap.new { |task1, task2| task2.priority <=> task1.priority }
 
   # Додавання завдань до купи
   tasks.each { |task| heap.push(task) }
@@ -166,9 +166,11 @@ puts "empty? (after pops): #{heap.empty?}\n\n" # Виведе true
 
 
 # Приклад використання пошуку найм елем
-puts 'Приклад використання пошуку найменшого елем'
+puts "Приклад використання пошуку найменшого елемента\n\n"
 array = [15, 13, 8, 4, 2, 31, 9]
 k = 3
+
+puts "Заданий масив: #{array}"
 result = find_k_smallest_elements(array, k)
 puts "Перші #{k} найменших елементів: #{result}"
 
