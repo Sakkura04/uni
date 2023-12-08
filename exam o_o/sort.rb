@@ -24,7 +24,7 @@ while true
     order = option == 1 ? 'asc' : 'desc'
     sorted_numbers = sort_numbers(numbers, order)
     puts "Sorted list: #{sorted_numbers}"
-    
+
   else
     puts("probably u have fat fingers, try again:")
   end
